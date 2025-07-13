@@ -1,16 +1,16 @@
 # TM Client - Decentralized Investment Pool Manager
 
-A modern, full-width React dApp for managing USDC investment pools on Ethereum Sepolia testnet. Built with React 19, Wagmi, and featuring comprehensive ERC20 token support.
+A modern, full-width React dApp for managing USDT investment pools on Ethereum Sepolia testnet. Built with React 19, Wagmi, and featuring comprehensive ERC20 token support.
 
 ## 🚀 Features
 
 ### User Features
 - **Connect MetaMask** - Streamlined wallet connection with enhanced detection
-- **USDC Pool Management** - View pool information, USDC balances, and your portion
-- **USDC Wallet Balance** - Monitor your USDC wallet balance in real-time
-- **Token Approval System** - Automatic USDC approval handling for deposits
-- **Deposit USDC** - Deposit USDC into the investment pool with lock periods
-- **Withdraw USDC** - Withdraw your USDC funds (respecting lock periods)
+- **USDT Pool Management** - View pool information, USDT balances, and your portion
+- **USDT Wallet Balance** - Monitor your USDT wallet balance in real-time
+- **Token Approval System** - Automatic USDT approval handling for deposits
+- **Deposit USDT** - Deposit USDT into the investment pool with lock periods
+- **Withdraw USDT** - Withdraw your USDT funds (respecting lock periods)
 - **Pending Withdrawals** - View and fulfill pending withdrawal requests
 - **Real-time Updates** - Automatic data refresh and transaction monitoring
 
@@ -36,7 +36,7 @@ A modern, full-width React dApp for managing USDC investment pools on Ethereum S
 - Node.js 18+ and pnpm
 - MetaMask browser extension
 - Sepolia testnet ETH for gas fees
-- Sepolia testnet USDC for testing (available from faucets)
+- Sepolia testnet USDT for testing (available from faucets)
 
 ### Installation Steps
 
@@ -56,7 +56,7 @@ Create a `.env` file in the root directory:
 ```env
 # Contract Configuration
 VITE_POOL_MANAGER_ADDRESS=0x... # Your deployed PoolManager contract address
-VITE_USDC_ADDRESS=0xA0b86a33E6417aB1E7b53D91d84b9A06B48fF071 # USDC on Sepolia
+VITE_USDT_ADDRESS=0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0 # USDT on Sepolia
 
 # Optional: Infura API Key for better RPC performance
 VITE_INFURA_API_KEY=your_infura_project_id
@@ -93,8 +93,8 @@ Navigate to `http://localhost:5173`
 
 3. **Make Deposits**
    - Go to "Deposit" tab
-   - Enter amount (minimum 1 USDC)
-   - Click "Approve USDC" to allow contract to spend your tokens
+   - Enter amount (minimum 1 USDT)
+   - Click "Approve USDT" to allow contract to spend your tokens
    - Once approved, click "Deposit" to complete the transaction
    - Wait for confirmation
 
@@ -140,13 +140,13 @@ Navigate to `http://localhost:5173`
 ## 📋 Contract Functions
 
 ### User Functions
-- `deposit(uint256 amount)` - Deposit USDC into pool (requires prior approval)
-- `withdraw(uint256 amount)` - Withdraw USDC from pool
+- `deposit(uint256 amount)` - Deposit USDT into pool (requires prior approval)
+- `withdraw(uint256 amount)` - Withdraw USDT from pool
 - `fulfillPendingWithdrawal(uint256 id)` - Fulfill pending withdrawal
 
-### ERC20 Functions (USDC)
-- `approve(address spender, uint256 amount)` - Approve pool contract to spend USDC
-- `balanceOf(address account)` - Get USDC balance
+### ERC20 Functions (USDT)
+- `approve(address spender, uint256 amount)` - Approve pool contract to spend USDT
+- `balanceOf(address account)` - Get USDT balance
 - `allowance(address owner, address spender)` - Get approval amount
 
 ### Admin Functions
@@ -162,7 +162,7 @@ Navigate to `http://localhost:5173`
 ### View Functions
 - `poolBalance()` - Get total pool balance
 - `deposits(address user)` - Get user deposit info
-- `userPortion(address user)` - Get user's portion
+- `userPortion(address user)` - Get user's portion (fraction with 18 decimals, displayed as %)
 - `threshold()` - Get current threshold
 - `lockPeriod()` - Get lock period
 - `getPendingWithdrawals(address user)` - Get pending withdrawals
@@ -191,8 +191,8 @@ The application uses a centralized configuration system in `src/constants/index.
 
 ```javascript
 // Minimum amounts
-MIN_DEPOSIT_AMOUNT: '1' // USDC
-MIN_WITHDRAWAL_AMOUNT: '1' // USDC
+MIN_DEPOSIT_AMOUNT: '1' // USDT
+MIN_WITHDRAWAL_AMOUNT: '1' // USDT
 
 // UI Settings
 REFRESH_INTERVAL: 30000 // 30 seconds
@@ -207,8 +207,8 @@ ENABLE_DEBUG_MODE: development mode
 
 - **Testnet Only** - This dApp is configured for Sepolia testnet
 - **MetaMask Required** - Only MetaMask wallet is supported
-- **USDC Required** - Pool operates with USDC tokens (6 decimals)
-- **Token Approval** - Must approve USDC before depositing
+- **USDT Required** - Pool operates with USDT tokens (6 decimals)
+- **Token Approval** - Must approve USDT before depositing
 - **Admin Permissions** - Admin panel requires proper contract roles
 - **Lock Periods** - Respect deposit lock periods before withdrawing
 - **Gas Fees** - Ensure sufficient Sepolia ETH for gas fees
@@ -242,9 +242,9 @@ The application is fully responsive and works on:
 
 3. **Transaction Failures**
    - Ensure sufficient Sepolia ETH for gas fees
-   - Check USDC balance and allowance
-   - Verify contract addresses (Pool Manager and USDC)
-   - Approve USDC before depositing
+   - Check USDT balance and allowance
+   - Verify contract addresses (Pool Manager and USDT)
+   - Approve USDT before depositing
 
 4. **Admin Panel Not Visible**
    - Ensure you have admin or manager role

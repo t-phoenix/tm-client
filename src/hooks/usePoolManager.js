@@ -68,35 +68,35 @@ export const usePoolManager = () => {
     enabled: !!CONTRACTS.POOL_MANAGER.address
   })
 
-  // USDC contract interactions
-  const { data: userUSDCBalance, refetch: refetchUserUSDCBalance } = useReadContract({
-    address: CONTRACTS.USDC.address,
+  // USDT contract interactions
+  const { data: userUSDTBalance, refetch: refetchUserUSDTBalance } = useReadContract({
+    address: CONTRACTS.USDT.address,
     abi: ERC20ABI,
     functionName: 'balanceOf',
     args: [address],
-    enabled: !!address && !!CONTRACTS.USDC.address
+    enabled: !!address && !!CONTRACTS.USDT.address
   })
 
-  const { data: usdcAllowance, refetch: refetchUSDCAllowance } = useReadContract({
-    address: CONTRACTS.USDC.address,
+  const { data: usdtAllowance, refetch: refetchUSDTAllowance } = useReadContract({
+    address: CONTRACTS.USDT.address,
     abi: ERC20ABI,
     functionName: 'allowance',
     args: [address, CONTRACTS.POOL_MANAGER.address],
-    enabled: !!address && !!CONTRACTS.USDC.address && !!CONTRACTS.POOL_MANAGER.address
+    enabled: !!address && !!CONTRACTS.USDT.address && !!CONTRACTS.POOL_MANAGER.address
   })
 
-  const { data: usdcDecimals } = useReadContract({
-    address: CONTRACTS.USDC.address,
+  const { data: usdtDecimals } = useReadContract({
+    address: CONTRACTS.USDT.address,
     abi: ERC20ABI,
     functionName: 'decimals',
-    enabled: !!CONTRACTS.USDC.address
+    enabled: !!CONTRACTS.USDT.address
   })
 
-  const { data: usdcSymbol } = useReadContract({
-    address: CONTRACTS.USDC.address,
+  const { data: usdtSymbol } = useReadContract({
+    address: CONTRACTS.USDT.address,
     abi: ERC20ABI,
     functionName: 'symbol',
-    enabled: !!CONTRACTS.USDC.address
+    enabled: !!CONTRACTS.USDT.address
   })
 
   // User-specific information
@@ -145,23 +145,24 @@ export const usePoolManager = () => {
   // WRITE CONTRACT FUNCTIONS - USER FUNCTIONS
   // ============================================================================
 
-  const approveUSDC = async (amount) => {
+  const approveUSDT = async (amount) => {
     if (!isConnected) {
       toast.error(ERROR_MESSAGES.WALLET_NOT_CONNECTED)
       return
     }
 
     try {
-      const amountInUSDC = parseUnits(amount.toString(), CONTRACTS.USDC.decimals)
+      const decimals = usdtDecimals || CONTRACTS.USDT.defaultDecimals
+      const amountInUSDT = parseUnits(amount.toString(), decimals)
       
       await writeContract({
-        address: CONTRACTS.USDC.address,
+        address: CONTRACTS.USDT.address,
         abi: ERC20ABI,
         functionName: 'approve',
-        args: [CONTRACTS.POOL_MANAGER.address, amountInUSDC]
+        args: [CONTRACTS.POOL_MANAGER.address, amountInUSDT]
       })
 
-      toast.success('USDC approval sent! Please wait for confirmation.')
+      toast.success('USDT approval sent! Please wait for confirmation.')
     } catch (error) {
       console.error('Approve error:', error)
       toast.error(error.shortMessage || ERROR_MESSAGES.TRANSACTION_FAILED)
@@ -175,24 +176,25 @@ export const usePoolManager = () => {
     }
 
     if (!amount || parseFloat(amount) < parseFloat(APP_CONFIG.MIN_DEPOSIT_AMOUNT)) {
-      toast.error(`Minimum deposit amount is ${APP_CONFIG.MIN_DEPOSIT_AMOUNT} USDC`)
+      toast.error(`Minimum deposit amount is ${APP_CONFIG.MIN_DEPOSIT_AMOUNT} USDT`)
       return
     }
 
     try {
-      const amountInUSDC = parseUnits(amount.toString(), CONTRACTS.USDC.decimals)
+      const decimals = usdtDecimals || CONTRACTS.USDT.defaultDecimals
+      const amountInUSDT = parseUnits(amount.toString(), decimals)
       
       // Check if user has sufficient allowance
-      const currentAllowance = usdcAllowance || 0n
-      if (currentAllowance < amountInUSDC) {
-        toast.error('Insufficient USDC allowance. Please approve USDC first.')
+      const currentAllowance = usdtAllowance || 0n
+      if (currentAllowance < amountInUSDT) {
+        toast.error('Insufficient USDT allowance. Please approve USDT first.')
         return
       }
 
       // Check if user has sufficient balance
-      const userBalance = userUSDCBalance || 0n
-      if (userBalance < amountInUSDC) {
-        toast.error('Insufficient USDC balance.')
+      const userBalance = userUSDTBalance || 0n
+      if (userBalance < amountInUSDT) {
+        toast.error('Insufficient USDT balance.')
         return
       }
       
@@ -200,7 +202,7 @@ export const usePoolManager = () => {
         address: CONTRACTS.POOL_MANAGER.address,
         abi: PoolManagerABI,
         functionName: 'deposit',
-        args: [amountInUSDC]
+        args: [amountInUSDT]
         // Note: No value sent as this is ERC20 transfer
       })
 
@@ -218,18 +220,19 @@ export const usePoolManager = () => {
     }
 
     if (!amount || parseFloat(amount) < parseFloat(APP_CONFIG.MIN_WITHDRAWAL_AMOUNT)) {
-      toast.error(`Minimum withdrawal amount is ${APP_CONFIG.MIN_WITHDRAWAL_AMOUNT} USDC`)
+      toast.error(`Minimum withdrawal amount is ${APP_CONFIG.MIN_WITHDRAWAL_AMOUNT} USDT`)
       return
     }
 
     try {
-      const amountInUSDC = parseUnits(amount.toString(), CONTRACTS.USDC.decimals)
+      const decimals = usdtDecimals || CONTRACTS.USDT.defaultDecimals
+      const amountInUSDT = parseUnits(amount.toString(), decimals)
       
       await writeContract({
         address: CONTRACTS.POOL_MANAGER.address,
         abi: PoolManagerABI,
         functionName: 'withdraw',
-        args: [amountInUSDC]
+        args: [amountInUSDT]
       })
 
       toast.success(SUCCESS_MESSAGES.TRANSACTION_SENT)
@@ -271,13 +274,14 @@ export const usePoolManager = () => {
     }
 
     try {
-      const thresholdInUSDC = parseUnits(newThreshold.toString(), CONTRACTS.USDC.decimals)
+      const decimals = usdtDecimals || CONTRACTS.USDT.defaultDecimals
+      const thresholdInUSDT = parseUnits(newThreshold.toString(), decimals)
       
       await writeContract({
         address: CONTRACTS.POOL_MANAGER.address,
         abi: PoolManagerABI,
         functionName: 'setThreshold',
-        args: [thresholdInUSDC]
+        args: [thresholdInUSDT]
       })
 
       toast.success(SUCCESS_MESSAGES.TRANSACTION_SENT)
@@ -360,13 +364,14 @@ export const usePoolManager = () => {
     }
 
     try {
-      const amountInUSDC = parseUnits(amount.toString(), CONTRACTS.USDC.decimals)
+      const decimals = usdtDecimals || CONTRACTS.USDT.defaultDecimals
+      const amountInUSDT = parseUnits(amount.toString(), decimals)
       
       await writeContract({
         address: CONTRACTS.POOL_MANAGER.address,
         abi: PoolManagerABI,
         functionName: 'manualTransferToMultisig',
-        args: [amountInUSDC]
+        args: [amountInUSDT]
       })
 
       toast.success(SUCCESS_MESSAGES.TRANSACTION_SENT)
@@ -448,20 +453,36 @@ export const usePoolManager = () => {
   // HELPER FUNCTIONS
   // ============================================================================
 
+  // Format token balances (deposits, withdrawals, thresholds) - uses USDT decimals
   const formatBalance = (balance) => {
     if (!balance) return '0'
-    return formatUnits(balance, CONTRACTS.USDC.decimals)
+    const decimals = usdtDecimals || CONTRACTS.USDT.defaultDecimals
+    return formatUnits(balance, decimals)
   }
 
-  const formatUSDCBalance = (balance) => {
+  // Format USDT wallet balance - uses USDT decimals
+  const formatUSDTBalance = (balance) => {
     if (!balance) return '0'
-    return formatUnits(balance, CONTRACTS.USDC.decimals)
+    const decimals = usdtDecimals || CONTRACTS.USDT.defaultDecimals
+    return formatUnits(balance, decimals)
+  }
+
+  // Format user portion (fraction of pool ownership) - uses 18 decimals
+  const formatPortion = (portion, asPercentage = false) => {
+    if (!portion) return asPercentage ? '0%' : '0'
+    const formatted = formatEther(portion) // userPortion uses 18 decimals
+    if (asPercentage) {
+      const percentage = (parseFloat(formatted) * 100).toFixed(2)
+      return `${percentage}%`
+    }
+    return formatted
   }
 
   const hasInsufficientAllowance = (amount) => {
-    if (!amount || !usdcAllowance) return true
-    const amountInUSDC = parseUnits(amount.toString(), CONTRACTS.USDC.decimals)
-    return usdcAllowance < amountInUSDC
+    if (!amount || !usdtAllowance) return true
+    const decimals = usdtDecimals || CONTRACTS.USDT.defaultDecimals
+    const amountInUSDT = parseUnits(amount.toString(), decimals)
+    return usdtAllowance < amountInUSDT
   }
 
   const isDepositLocked = (deposit) => {
@@ -492,8 +513,8 @@ export const usePoolManager = () => {
     refetchMultisig()
     refetchFundingToken()
     refetchPoolToken()
-    refetchUserUSDCBalance()
-    refetchUSDCAllowance()
+    refetchUserUSDTBalance()
+    refetchUSDTAllowance()
   }
 
   // Check if user has administrative privileges
@@ -516,12 +537,12 @@ export const usePoolManager = () => {
     poolToken,
     
     // ============================================================================
-    // USDC DATA
+    // USDT DATA
     // ============================================================================
-    userUSDCBalance,
-    usdcAllowance,
-    usdcDecimals,
-    usdcSymbol,
+    userUSDTBalance,
+    usdtAllowance,
+    usdtDecimals,
+    usdtSymbol,
     
     // ============================================================================
     // USER PERMISSIONS
@@ -536,7 +557,7 @@ export const usePoolManager = () => {
     deposit,
     withdraw,
     fulfillPendingWithdrawal,
-    approveUSDC,
+    approveUSDT,
     
     // ============================================================================
     // ADMIN FUNCTIONS
@@ -563,7 +584,8 @@ export const usePoolManager = () => {
     // HELPER FUNCTIONS
     // ============================================================================
     formatBalance,
-    formatUSDCBalance,
+    formatUSDTBalance,
+    formatPortion,
     hasInsufficientAllowance,
     isDepositLocked,
     getLockTimeRemaining,

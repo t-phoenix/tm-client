@@ -15,19 +15,21 @@ const PoolManager = () => {
     lockPeriod,
     pendingWithdrawals,
     hasAdminAccess,
-    userUSDCBalance,
-    usdcAllowance,
-    usdcSymbol,
+    userUSDTBalance,
+    usdtAllowance,
+    usdtSymbol,
     deposit,
     withdraw,
     fulfillPendingWithdrawal,
-    approveUSDC,
+    approveUSDT,
+    approveUSDTUnlimited,
     isPending,
     isConfirming,
     isConfirmed,
     hash,
     formatBalance,
-    formatUSDCBalance,
+    formatUSDTBalance,
+    formatPortion,
     hasInsufficientAllowance,
     isDepositLocked,
     getLockTimeRemaining,
@@ -146,13 +148,13 @@ const PoolManager = () => {
               <div className="info-card">
                 <h3>Total Pool Balance</h3>
                 <p className="balance-value">
-                  {formatBalance(poolBalance)} {usdcSymbol || 'USDC'}
+                  {formatBalance(poolBalance)} {usdtSymbol || 'USDT'}
                 </p>
               </div>
               <div className="info-card">
-                <h3>Your USDC Balance</h3>
+                <h3>Your USDT Balance</h3>
                 <p className="balance-value">
-                  {formatUSDCBalance(userUSDCBalance)} {usdcSymbol || 'USDC'}
+                  {formatUSDTBalance(userUSDTBalance)} {usdtSymbol || 'USDT'}
                 </p>
                 <p className="balance-subtext">
                   Available in wallet
@@ -161,30 +163,37 @@ const PoolManager = () => {
               <div className="info-card">
                 <h3>Your Deposit</h3>
                 <p className="balance-value">
-                  {userDeposit ? formatBalance(userDeposit.amount) : '0'} {usdcSymbol || 'USDC'}
+                  {userDeposit ? formatBalance(userDeposit.amount) : '0'} {usdtSymbol || 'USDT'}
                 </p>
                 {userDeposit && isDepositLocked(userDeposit) && (
                   <p className="lock-info">
                     🔒 Locked for {formatLockTime(getLockTimeRemaining(userDeposit))}
                   </p>
                 )}
+                {/* Debug info */}
+                <p className="balance-subtext" style={{fontSize: '0.7rem'}}>
+                  Debug: {userDeposit ? `Amount: ${userDeposit.amount?.toString()}, Lock: ${userDeposit.lockUntil?.toString()}` : 'No data'}
+                </p>
               </div>
               <div className="info-card">
                 <h3>Your Portion</h3>
                 <p className="balance-value">
-                  {userPortion ? formatBalance(userPortion) : '0'} {usdcSymbol || 'USDC'}
+                  {formatPortion(userPortion, true)}
+                </p>
+                <p className="balance-subtext">
+                  Share of total pool
                 </p>
               </div>
               <div className="info-card">
                 <h3>Threshold</h3>
                 <p className="balance-value">
-                  {formatBalance(threshold)} {usdcSymbol || 'USDC'}
+                  {formatBalance(threshold)} {usdtSymbol || 'USDT'}
                 </p>
               </div>
               <div className="info-card">
-                <h3>USDC Allowance</h3>
+                <h3>USDT Allowance</h3>
                 <p className="balance-value">
-                  {formatUSDCBalance(usdcAllowance)} {usdcSymbol || 'USDC'}
+                  {formatUSDTBalance(usdtAllowance)} {usdtSymbol || 'USDT'}
                 </p>
                 <p className="balance-subtext">
                   Approved for pool
@@ -261,18 +270,22 @@ const PoolManager = () => {
 
         {activeTab === 'deposit' && (
           <div className="deposit-section">
-            <h3>Deposit {usdcSymbol || 'USDC'}</h3>
+            <h3>Deposit {usdtSymbol || 'USDT'}</h3>
             
             {/* User balance info */}
             <div className="balance-info">
-              <p>Your USDC Balance: <strong>{formatUSDCBalance(userUSDCBalance)} {usdcSymbol || 'USDC'}</strong></p>
-              <p>Current Allowance: <strong>{formatUSDCBalance(usdcAllowance)} {usdcSymbol || 'USDC'}</strong></p>
+              <p>Your USDT Balance: <strong>{formatUSDTBalance(userUSDTBalance)} {usdtSymbol || 'USDT'}</strong></p>
+              <p>Current Allowance: <strong>{formatUSDTBalance(usdtAllowance)} {usdtSymbol || 'USDT'}</strong></p>
+              {/* Debug info for userDeposit */}
+              {/* <p style={{fontSize: '0.8rem', color: '#666'}}>
+                Debug - User Deposit: {userDeposit ? JSON.stringify(userDeposit) : 'No deposit found'}
+              </p> */}
             </div>
 
             <div className="input-group">
               <input
                 type="number"
-                placeholder={`Amount in ${usdcSymbol || 'USDC'}`}
+                placeholder={`Amount in ${usdtSymbol || 'USDT'}`}
                 value={depositAmount}
                 onChange={(e) => setDepositAmount(e.target.value)}
                 min="0"
@@ -283,11 +296,11 @@ const PoolManager = () => {
               {/* Show approve button if insufficient allowance */}
               {depositAmount && hasInsufficientAllowance(depositAmount) ? (
                 <button 
-                  onClick={() => approveUSDC(depositAmount)}
+                  onClick={() => approveUSDT(depositAmount)}
                   disabled={isPending || isConfirming || !depositAmount}
                   className="action-btn approve-btn"
                 >
-                  {isPending || isConfirming ? 'Processing...' : `Approve ${usdcSymbol || 'USDC'}`}
+                  {isPending || isConfirming ? 'Processing...' : `Approve ${usdtSymbol || 'USDT'}`}
                 </button>
               ) : (
                 <button 
@@ -299,12 +312,24 @@ const PoolManager = () => {
                 </button>
               )}
             </div>
+
+            {/* Quick actions */}
+            <div className="quick-actions">
+              <button 
+                onClick={approveUSDTUnlimited}
+                disabled={isPending || isConfirming}
+                className="action-btn approve-btn"
+                style={{fontSize: '0.9rem', padding: '0.75rem 1.5rem'}}
+              >
+                {isPending || isConfirming ? 'Processing...' : '♾️ Unlimited Approval'}
+              </button>
+            </div>
             
             <p className="lock-period-info">
               ⏰ Lock period: {lockPeriod ? Math.floor(Number(lockPeriod) / (24 * 60 * 60)) : 0} days
             </p>
             <p className="min-amount-info">
-              💡 Minimum deposit: 1 {usdcSymbol || 'USDC'}
+              💡 Minimum deposit: 1 {usdtSymbol || 'USDT'}
             </p>
             
             {/* Instructions */}
@@ -312,27 +337,28 @@ const PoolManager = () => {
               <p><strong>💡 How to deposit:</strong></p>
               <ol>
                 <li>Enter the amount you want to deposit</li>
-                <li>Click "Approve USDC" to allow the contract to spend your USDC</li>
+                <li>Click "Approve USDT" to allow the contract to spend your USDT</li>
                 <li>Once approved, click "Deposit" to complete the transaction</li>
               </ol>
+              <p><strong>⚡ Quick Tip:</strong> Use "♾️ Unlimited Approval" to avoid approving for each deposit!</p>
             </div>
           </div>
         )}
 
         {activeTab === 'withdraw' && (
           <div className="withdraw-section">
-            <h3>Withdraw {usdcSymbol || 'USDC'}</h3>
+            <h3>Withdraw {usdtSymbol || 'USDT'}</h3>
             
             {/* User deposit info */}
             <div className="balance-info">
-              <p>Your Deposit: <strong>{userDeposit ? formatBalance(userDeposit.amount) : '0'} {usdcSymbol || 'USDC'}</strong></p>
-              <p>Your Portion: <strong>{userPortion ? formatBalance(userPortion) : '0'} {usdcSymbol || 'USDC'}</strong></p>
+              <p>Your Deposit: <strong>{userDeposit ? formatBalance(userDeposit.amount) : '0'} {usdtSymbol || 'USDT'}</strong></p>
+              <p>Your Portion: <strong>{formatPortion(userPortion, true)}</strong></p>
             </div>
 
             <div className="input-group">
               <input
                 type="number"
-                placeholder={`Amount in ${usdcSymbol || 'USDC'}`}
+                placeholder={`Amount in ${usdtSymbol || 'USDT'}`}
                 value={withdrawAmount}
                 onChange={(e) => setWithdrawAmount(e.target.value)}
                 min="0"
@@ -354,7 +380,7 @@ const PoolManager = () => {
               </p>
             )}
             <p className="min-amount-info">
-              💡 Minimum withdrawal: 1 {usdcSymbol || 'USDC'}
+              💡 Minimum withdrawal: 1 {usdtSymbol || 'USDT'}
             </p>
           </div>
         )}

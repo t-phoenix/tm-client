@@ -22,7 +22,7 @@ export const config = createConfig({
 
 // Contract addresses from environment variables with fallback
 export const POOL_MANAGER_ADDRESS = import.meta.env.VITE_POOL_MANAGER_ADDRESS || '0x0000000000000000000000000000000000000000'
-export const USDC_ADDRESS = import.meta.env.VITE_USDC_ADDRESS || '0xA0b86a33E6417aB1E7b53D91d84b9A06B48fF071' // USDC on Sepolia
+export const USDT_ADDRESS = import.meta.env.VITE_USDT_ADDRESS || '0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0' // USDT on Sepolia
 
 // Chain configurations
 export const SUPPORTED_CHAINS = [sepolia]
@@ -40,11 +40,12 @@ export const CONTRACTS = {
     address: POOL_MANAGER_ADDRESS,
     chainId: sepolia.id
   },
-  USDC: {
-    address: USDC_ADDRESS,
+  USDT: {
+    address: USDT_ADDRESS,
     chainId: sepolia.id,
-    decimals: 6,
-    symbol: 'USDC'
+    // decimals and symbol will be read from contract
+    defaultDecimals: 6, // fallback if contract call fails
+    defaultSymbol: 'USDT' // fallback if contract call fails
   }
 }
 
@@ -53,7 +54,7 @@ export const NETWORK_CONFIG = {
   [sepolia.id]: {
     name: 'Sepolia Testnet',
     currency: 'ETH',
-    poolCurrency: 'USDC',
+    poolCurrency: 'USDT',
     explorerUrl: 'https://sepolia.etherscan.io',
     rpcUrl: RPC_URLS[sepolia.id]
   }

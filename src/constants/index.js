@@ -36,8 +36,8 @@ export const APP_CONFIG = {
   BLOCK_CONFIRMATIONS: 1,
   
   // Pool Settings
-  MIN_DEPOSIT_AMOUNT: '1', // USDC
-  MIN_WITHDRAWAL_AMOUNT: '1', // USDC
+  MIN_DEPOSIT_AMOUNT: '1', // USDT
+  MIN_WITHDRAWAL_AMOUNT: '1', // USDT
 }
 
 // Error Messages

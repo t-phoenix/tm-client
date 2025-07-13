@@ -547,6 +547,20 @@
   margin-bottom: 0.5rem;
 }
 
+.quick-actions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.quick-actions .action-btn {
+  min-width: auto;
+  white-space: nowrap;
+}
+
 .warning {
   color: #ff6b6b;
   font-weight: 500;
