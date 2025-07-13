@@ -1,0 +1,445 @@
+/* Instructions Component Styles */
+.instructions {
+  width: 100%;
+  padding: 2rem;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.instructions-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+}
+
+.instructions-header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.instructions-header p {
+  margin: 0;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Navigation */
+.instructions-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  flex-wrap: wrap;
+}
+
+.instructions-nav .nav-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: #f8f9fa;
+  color: #666;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 150px;
+  font-size: 0.95rem;
+}
+
+.instructions-nav .nav-btn:hover {
+  background: #e9ecef;
+  color: #333;
+}
+
+.instructions-nav .nav-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Content */
+.instructions-content {
+  width: 100%;
+}
+
+.instructions-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.instructions-section h3 {
+  margin: 0 0 2rem 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 1rem;
+}
+
+/* Instruction Blocks */
+.instruction-block {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.instruction-block:last-child {
+  margin-bottom: 0;
+}
+
+.instruction-block h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.instruction-block p {
+  margin: 0 0 1rem 0;
+  color: #555;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.instruction-block ol,
+.instruction-block ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  color: #555;
+}
+
+.instruction-block ol li,
+.instruction-block ul li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.instruction-block ol li {
+  padding-left: 0.5rem;
+}
+
+/* Nested lists */
+.instruction-block ul ul,
+.instruction-block ol ul {
+  margin: 0.5rem 0 0.5rem 1rem;
+}
+
+.instruction-block ul ul li,
+.instruction-block ol ul li {
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+/* Special styling for strong text */
+.instruction-block strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Contract Information Block */
+.contract-info-block {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  margin: 1rem 0;
+}
+
+.contract-detail {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contract-detail:last-child {
+  margin-bottom: 0;
+}
+
+.contract-address-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.contract-address-display code {
+  flex: 1;
+  min-width: 300px;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  word-break: break-all;
+  color: #333;
+}
+
+.verify-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  background: white;
+  border: 1px solid #667eea;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.verify-link:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Tips and warnings */
+.tip {
+  background: rgba(17, 153, 142, 0.1);
+  border: 1px solid rgba(17, 153, 142, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #0f5132;
+}
+
+.warning {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #842029;
+}
+
+.tip strong,
+.warning strong {
+  color: inherit;
+}
+
+/* Code blocks */
+.code-block {
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.code-block pre {
+  margin: 0;
+  color: #d4d4d4;
+  font-family: 'Courier New', Consolas, Monaco, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.code-block code {
+  background: #2d2d30;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', Consolas, Monaco, monospace;
+  font-size: 0.9rem;
+}
+
+/* Links */
+.instructions a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.instructions a:hover {
+  text-decoration: underline;
+  color: #5a6fd8;
+}
+
+/* Code inline */
+code {
+  background: #f1f3f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', Consolas, Monaco, monospace;
+  font-size: 0.9rem;
+  color: #d63384;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .instructions {
+    padding: 1rem;
+  }
+  
+  .instructions-header {
+    padding: 1.5rem;
+  }
+  
+  .instructions-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .instructions-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .instructions-nav .nav-btn {
+    min-width: auto;
+    flex: none;
+  }
+  
+  .instructions-section {
+    padding: 1.5rem;
+  }
+  
+  .instructions-section h3 {
+    font-size: 1.5rem;
+  }
+  
+  .instruction-block {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .instruction-block h4 {
+    font-size: 1.1rem;
+  }
+  
+  .instruction-block ol,
+  .instruction-block ul {
+    padding-left: 1rem;
+  }
+  
+  .contract-address-display {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .contract-address-display code {
+    min-width: auto;
+  }
+  
+  .verify-link {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .instructions {
+    padding: 0.5rem;
+  }
+  
+  .instructions-header {
+    padding: 1rem;
+  }
+  
+  .instructions-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .instructions-section {
+    padding: 1rem;
+  }
+  
+  .instructions-section h3 {
+    font-size: 1.3rem;
+  }
+  
+  .instruction-block {
+    padding: 0.75rem;
+  }
+  
+  .instruction-block h4 {
+    font-size: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .contract-info-block {
+    padding: 1rem;
+  }
+  
+  .contract-address-display code {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
+  
+  .code-block {
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+  }
+  
+  .code-block pre {
+    font-size: 0.8rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .instructions {
+    background: white;
+    padding: 1rem;
+  }
+  
+  .instructions-nav {
+    display: none;
+  }
+  
+  .instructions-header,
+  .instructions-section,
+  .instruction-block {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  .tip,
+  .warning {
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+  }
+  
+  .contract-info-block {
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+  }
+} 

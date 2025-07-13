@@ -1,34 +1,81 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import WalletConnect from './components/WalletConnect.jsx'
+import PoolManager from './components/PoolManager.jsx'
+import { useWeb3 } from './context/Web3Context.jsx'
+import { APP_VERSION, DEPLOYMENT_INFO } from './constants/index.js'
+import { CONTRACTS } from './config/web3.js'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { isConnected, formatAddress } = useWeb3()
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="App">
+      <header className="app-header">
+        <div className="header-content">
+          <div className="header-left">
+            <h1>TM Client</h1>
+            <p>Decentralized Investment Pool Manager</p>
+          </div>
+          <div className="header-right">
+            <WalletConnect />
+          </div>
+        </div>
+      </header>
+      
+      <main className="app-main">
+        {isConnected ? (
+          <div className="pool-section">
+            <PoolManager />
+          </div>
+        ) : (
+          <div className="connect-prompt">
+            <div className="connect-message">
+              <h2>Welcome to TM Client</h2>
+              <p>Connect your MetaMask wallet to access the Investment Pool Manager</p>
+              <div className="features-list">
+                <div className="feature-item">
+                  <span className="feature-icon">💰</span>
+                  <span>Manage your investments</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">🔒</span>
+                  <span>Secure lock periods</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">📊</span>
+                  <span>Real-time pool data</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">🌐</span>
+                  <span>Sepolia testnet</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+      
+      <footer className="app-footer">
+        <div className="footer-content">
+          <div className="footer-info">
+            <p>&copy; 2024 TM Client v{APP_VERSION}. Built with React & Wagmi on {DEPLOYMENT_INFO.network}.</p>
+          </div>
+          <div className="footer-contract">
+            <span className="contract-label">Pool Manager:</span>
+            <code className="contract-address-footer">{formatAddress(CONTRACTS.POOL_MANAGER.address)}</code>
+            <a 
+              href={`https://sepolia.etherscan.io/address/${CONTRACTS.POOL_MANAGER.address}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-etherscan-link"
+              title="View on Etherscan"
+            >
+              🔍
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
   )
 }
 
